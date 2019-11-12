@@ -24,6 +24,12 @@ int redValue = 0;
 int greenValue = 0;
 int blueValue = 0;
 
+void changeColor(int red, int green, int blue) {
+  analogWrite(ledRed, red);
+  analogWrite(ledGreen, green);
+  analogWrite(ledBlue, blue);
+}
+
 void setup() {
   // Potentiometer
   pinMode(knobRed, INPUT);
@@ -54,7 +60,5 @@ void loop() {
 //  Serial.println(blueValue);
 
   // we write the values to the LED
-  analogWrite(ledRed, redValue);
-  analogWrite(ledGreen, greenValue);
-  analogWrite(ledBlue, blueValue);
+  changeColor(redValue, greenValue, blueValue);
 }
