@@ -133,6 +133,23 @@ bool checkUp() {
 
 bool leftMoved, rightMoved, upMoved, downMoved;
 
+int counter = 0;
+int numbers[] = {0, 0, 0, 0};
+
+// for showing digits
+int digitShowInterval = 5;
+unsigned long currentTime = 0, startTime = 0;
+int digitCounter = 0;
+
+// for blinking active digit
+int blinkInterval = 500;
+unsigned long blinkStart = 0;
+bool blinkState = true;
+
+// if digit is locked
+bool locked = false; // initially none are locked
+bool buttonPressed = false;
+
 void setup() {
   pinMode(joyX, INPUT);
   pinMode(joyY, INPUT);
@@ -153,23 +170,6 @@ void setup() {
   
   Serial.begin(9600);
 }
-
-int counter = 0;
-int numbers[] = {0, 0, 0, 0};
-
-// for showing digits
-int digitShowInterval = 5;
-unsigned long currentTime = 0, startTime = 0;
-int digitCounter = 0;
-
-// for blinking active digit
-int blinkInterval = 500;
-unsigned long blinkStart = 0;
-bool blinkState = true;
-
-// if digit is locked
-bool locked = false; // initially none are locked
-bool buttonPressed = false;
 
 void loop() {
 
