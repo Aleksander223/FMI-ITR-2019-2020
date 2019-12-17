@@ -50,3 +50,4 @@ byte joyStickState = -1;
 byte LCDBrightness = 90;
 bool gameStarted = false;
 bool musicOn = false;
+bool gameInitialized = false;

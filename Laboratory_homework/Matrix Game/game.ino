@@ -1,4 +1,4 @@
-#include "gameMelody.h"
+//#include "gameMelody.h"
 #include "globals.h"
 #include "joystick.h"
 #include "lcdMenu.h"
@@ -42,10 +42,9 @@ void setup() {
 
   writeHighScore("ALX", 9000);
 
-  // initialize game variables
-  initGame();
-
   debugMode();
+
+  
 }
 
 void loop() {
@@ -59,6 +58,11 @@ void loop() {
  
   if (!gameStarted) {
     menu(); 
+  } else if (!gameInitialized) {
+    // initialize game variables
+    initGame();
+
+    gameInitialized = true;
   } else {
     gameLoop();
   }

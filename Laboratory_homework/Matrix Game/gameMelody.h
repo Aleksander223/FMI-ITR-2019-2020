@@ -31,10 +31,9 @@ unsigned long lastNoteTime = 0;
 int interval = 0;
 bool notePlaying = false;
 
-
 // This plays a sound effect
-void playSFX() {
-  tone(SFXBuzzerPin, 1200, 300);
+void playSFX(int t) {
+  tone(SFXBuzzerPin, t, 100);
 }
 
 // This plays the Korobeiniki song asynchronously using millis()
