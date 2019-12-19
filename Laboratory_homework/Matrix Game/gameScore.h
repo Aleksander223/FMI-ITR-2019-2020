@@ -4,12 +4,14 @@
 #include <string.h>
 
 // makes returning score easier
-typedef struct {
+typedef struct
+{
   char playerName[4];
-  unsigned short score;  
+  unsigned short score;
 } STRUCT_SCORE;
 
-STRUCT_SCORE readHighScore() {
+STRUCT_SCORE readHighScore()
+{
   STRUCT_SCORE tmp;
 
   EEPROM.get(0, tmp);
@@ -17,7 +19,8 @@ STRUCT_SCORE readHighScore() {
   return tmp;
 }
 
-void writeHighScore(const char* playerName, unsigned short score) {
+void writeHighScore(const char *playerName, unsigned short score)
+{
   STRUCT_SCORE tmp;
   strncpy(tmp.playerName, playerName, 4);
   tmp.score = score;

@@ -9,74 +9,80 @@ const byte numStrings = 4;
 byte currentView = 0;
 
 char menuStrings[numStrings][16] = {
-  "Start",
-  "Settings",
-  "Highscore",
-  "Info"
-};
+    "Start",
+    "Settings",
+    "Highscore",
+    "Info"};
 
 char infoMenuStrings[numStrings][16] = {
-  "Endless Tetris",
-  "bit.ly/2YV4mg4",
-  "Adam Alexandru V",
-  "@unibucrobotics"
-};
+    "Endless Tetris",
+    "bit.ly/2YV4mg4",
+    "Adam Alexandru V",
+    "@unibucrobotics"};
 
-bool menuChanged = true;
-bool viewChanged = false;
-
-// sounds stupid but the arduino somehow senses the joystick is pressed upon initialization so this is necessary
-bool oneSecondPassed = false;
-
-void updateCursor() {
-  if (joyStickState == JOY_DOWN) {
+void updateCursor()
+{
+  if (joyStickState == JOY_DOWN)
+  {
     cursorPosition = (cursorPosition + 1) % numStrings;
     menuChanged = true;
   }
-  else if (joyStickState == JOY_UP) {
-    if (cursorPosition == 0) {
-      cursorPosition = numStrings - 1 ;
-    } else {
+  else if (joyStickState == JOY_UP)
+  {
+    if (cursorPosition == 0)
+    {
+      cursorPosition = numStrings - 1;
+    }
+    else
+    {
       cursorPosition--;
     }
     menuChanged = true;
-  } else if (joyStickState == JOY_SW && oneSecondPassed) {
+  }
+  else if (joyStickState == JOY_SW && oneSecondPassed)
+  {
     menuChanged = true;
     viewChanged = true;
   }
 }
 
-void displayHighScore() {
-  if (menuChanged) {
+void displayHighScore()
+{
+  if (menuChanged)
+  {
     lcd.clear();
     lcd.setCursor(0, 0);
-  
+
     STRUCT_SCORE score = readHighScore();
-    
+
     lcd.print(score.playerName);
-  
+
     lcd.setCursor(0, 1);
     lcd.print(score.score);
-  
-    menuChanged = false; 
+
+    menuChanged = false;
   }
 }
 
-void displayInfoMenu() {
-  if (menuChanged) {
+void displayInfoMenu()
+{
+  if (menuChanged)
+  {
     lcd.clear();
     lcd.setCursor(0, 0);
 
     // selected option
     lcd.print(infoMenuStrings[cursorPosition]);
-  
+
     // next line
-    if (cursorPosition <= 2) {
+    if (cursorPosition <= 2)
+    {
       lcd.setCursor(0, 1);
-      
+
       lcd.print(infoMenuStrings[cursorPosition + 1]);
     }
-    else {
+    else
+    {
       lcd.setCursor(0, 1);
       lcd.print(infoMenuStrings[0]);
     }
@@ -85,22 +91,26 @@ void displayInfoMenu() {
   }
 }
 
-void displayMenu() {
-  if (menuChanged) {
+void displayMenu()
+{
+  if (menuChanged)
+  {
     lcd.clear();
     lcd.setCursor(1, 0);
 
     // selected option
     lcd.print(">");
     lcd.print(menuStrings[cursorPosition]);
-  
+
     // next line
-    if (cursorPosition <= 2) {
+    if (cursorPosition <= 2)
+    {
       lcd.setCursor(1, 1);
-      
+
       lcd.print(menuStrings[cursorPosition + 1]);
     }
-    else {
+    else
+    {
       lcd.setCursor(1, 1);
 
       lcd.print(menuStrings[0]);
@@ -110,97 +120,117 @@ void displayMenu() {
   }
 }
 
-// game info variables
-byte level = 1;
-byte goal = 5;
-byte currentGoal = 0;
-byte timeLimit = 60;
-byte timeLeft = 60;
-unsigned int gameScore = 0;
-bool gameInfoChanged = true;
-
-void displayGameInfo() {
-  if (gameInfoChanged) {
+void displayGameInfo()
+{
+  if (gameInfoChanged)
+  {
     lcd.clear();
     lcd.setCursor(0, 0);
-  
-    lcd.print("Lvl "); lcd.print(level);
-  
-    lcd.print(" Goal "); lcd.print(currentGoal); lcd.print("/"); lcd.print(goal);
+
+    lcd.print("Lvl ");
+    lcd.print(level);
+
+    lcd.print(" Goal ");
+    lcd.print(currentGoal);
+    lcd.print("/");
+    lcd.print(goal);
 
     lcd.setCursor(0, 1);
-  
-    lcd.print(timeLeft); lcd.print("s ");
-  
-    lcd.print("Score "); lcd.print(gameScore);
+
+    lcd.print(timeLeft);
+    lcd.print("s ");
+
+    lcd.print("Score ");
+    lcd.print(gameScore);
 
     gameInfoChanged = false;
   }
 }
 
-void updateScore(int value) {
-  if (value < 0 && -value > gameScore) {
+void updateScore(int value)
+{
+  if (value < 0 && -value > gameScore)
+  {
     gameScore = 0;
-  } else {
+  }
+  else
+  {
     gameScore += level * value;
   }
-  
+
   gameInfoChanged = true;
 }
 
-void updateLevel() {
+void updateLevel()
+{
   level++;
   goal += 2;
-  if (timeLimit - 5 > 15) {
+  if (timeLimit - 5 > 15)
+  {
     timeLimit -= 5;
   }
 
   gameInfoChanged = true;
 }
 
-void updateGoal() {
+void updateGoal()
+{
   currentGoal++;
 
   gameInfoChanged = true;
 }
 
-void updateTimeLeft() {
+void updateTimeLeft()
+{
   timeLeft--;
 
   gameInfoChanged = true;
 }
 
-void menu() {
+void menu()
+{
   updateCursor();
 
-  if (viewChanged) {
+  if (viewChanged)
+  {
     // go to Info view
-    if (currentView == 0 && cursorPosition == 3) {
+    if (currentView == 0 && cursorPosition == 3)
+    {
       currentView = 1;
     }
     // go to High Score
-    else if (currentView == 0 && cursorPosition == 2) {
+    else if (currentView == 0 && cursorPosition == 2)
+    {
       currentView = 2;
     }
     // start game
-    else if (currentView == 0 && cursorPosition == 0) {
+    else if (currentView == 0 && cursorPosition == 0)
+    {
       gameStarted = true;
       currentView = 9;
     }
     // return to main menu
-    else if (currentView != 0) {
+    else if (currentView != 0)
+    {
       currentView = 0;
     }
     viewChanged = false;
   }
 
-  if (currentView == 0) {
+  if (currentView == 0)
+  {
     displayMenu();
-  } else if (currentView == 1) {
+  }
+  else if (currentView == 1)
+  {
     displayInfoMenu();
-  } else if (currentView == 2) {
+  }
+  else if (currentView == 2)
+  {
     displayHighScore();
-  } else if (currentView == 9) {
+  }
+  else if (currentView == 9)
+  {
     lcd.clear();
   }
 }

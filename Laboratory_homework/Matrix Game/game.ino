@@ -6,18 +6,20 @@
 #include "gameLoop.h"
 
 // starts debug mode
-void debugMode() {
+void debugMode()
+{
   Serial.begin(9600);
 }
 
-void setup() {
+void setup()
+{
   // LCD start
   lcd.begin(16, 2);
 
   // Matrix start
-  lc.shutdown(0, false); // turn off power saving, enables display
+  lc.shutdown(0, false);                       // turn off power saving, enables display
   lc.setIntensity(0, matrixDisplayBrightness); //  sets brightness (0~15 possible values)
-  lc.clearDisplay(0);// clear screen
+  lc.clearDisplay(0);                          // clear screen
 
   // Pin initializations
 
@@ -43,27 +45,32 @@ void setup() {
   writeHighScore("ALX", 9000);
 
   debugMode();
-
-  
 }
 
-void loop() {
+void loop()
+{
   currentTime = millis();
 
   joyStickState = getJoystick();
 
-  if (!oneSecondPassed && currentTime > 2000) {
+  if (!oneSecondPassed && currentTime > 2000)
+  {
     oneSecondPassed = true;
   }
- 
-  if (!gameStarted) {
-    menu(); 
-  } else if (!gameInitialized) {
+
+  if (!gameStarted)
+  {
+    menu();
+  }
+  else if (!gameInitialized)
+  {
     // initialize game variables
     initGame();
 
     gameInitialized = true;
-  } else {
+  }
+  else
+  {
     displayGameInfo();
     gameLoop();
   }

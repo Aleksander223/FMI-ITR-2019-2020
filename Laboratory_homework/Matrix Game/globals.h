@@ -33,7 +33,6 @@ const int xAxisPin = A0;
 const int yAxisPin = A1;
 const int SWPin = A2;
 
-
 // Object declarations
 
 // LCD Screen
@@ -42,13 +41,36 @@ LiquidCrystal lcd(RS, enable, d4, d5, d6, d7);
 // Matrix display
 LedControl lc = LedControl(DIN, CLK, LOAD, 1);
 
-
 // GLOBALS
+
+// hardware
 byte matrixDisplayBrightness = 2;
-unsigned long currentTime = 0;
-byte joyStickState = -1;
 byte LCDBrightness = 90;
+
+// timers
+unsigned long currentTime = 0;
+
+// input
+byte joyStickState = -1;
+
+// game info variables
+byte level = 1;
+byte goal = 5;
+byte currentGoal = 0;
+byte timeLimit = 60;
+byte timeLeft = 60;
+unsigned int gameScore = 0;
+bool gameInfoChanged = true;
+
+// booleans
 bool gameStarted = false;
 bool musicOn = false;
 bool gameInitialized = false;
-unsigned long gameStartTime = 0;
+
+// menu
+bool menuChanged = true;
+bool viewChanged = false;
+
+// sounds stupid but the arduino somehow senses the joystick is pressed upon initialization so this is necessary
+// would use delay but that's against the rules ¯\_(ツ)_/¯
+bool oneSecondPassed = false;

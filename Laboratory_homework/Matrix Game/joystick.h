@@ -22,12 +22,15 @@ bool swActive = false;
 int xAxis, yAxis, joySW;
 
 // individual directions, with state checking
-bool checkUp() {
-  if (yAxis > minDeadzone && yAxis < maxDeadzone) {
+bool checkUp()
+{
+  if (yAxis > minDeadzone && yAxis < maxDeadzone)
+  {
     upActive = false;
   }
-  
-  if (yAxis < minDeadzone && !upActive) {
+
+  if (yAxis < minDeadzone && !upActive)
+  {
     upActive = true;
     return true;
   }
@@ -35,12 +38,15 @@ bool checkUp() {
   return false;
 }
 
-bool checkDown() {
-  if (yAxis > minDeadzone && yAxis < maxDeadzone) {
+bool checkDown()
+{
+  if (yAxis > minDeadzone && yAxis < maxDeadzone)
+  {
     downActive = false;
   }
-  
-  if (yAxis > maxDeadzone && !downActive) {
+
+  if (yAxis > maxDeadzone && !downActive)
+  {
     downActive = true;
     return true;
   }
@@ -48,12 +54,15 @@ bool checkDown() {
   return false;
 }
 
-bool checkLeft() {
-  if (xAxis > minDeadzone && xAxis < maxDeadzone) {
+bool checkLeft()
+{
+  if (xAxis > minDeadzone && xAxis < maxDeadzone)
+  {
     leftActive = false;
   }
-  
-  if (xAxis < minDeadzone && !leftActive) {
+
+  if (xAxis < minDeadzone && !leftActive)
+  {
     leftActive = true;
     return true;
   }
@@ -61,12 +70,15 @@ bool checkLeft() {
   return false;
 }
 
-bool checkRight() {
-  if (xAxis > minDeadzone && xAxis < maxDeadzone) {
+bool checkRight()
+{
+  if (xAxis > minDeadzone && xAxis < maxDeadzone)
+  {
     rightActive = false;
   }
-  
-  if (xAxis > maxDeadzone && !rightActive) {
+
+  if (xAxis > maxDeadzone && !rightActive)
+  {
     rightActive = true;
     return true;
   }
@@ -74,12 +86,15 @@ bool checkRight() {
   return false;
 }
 
-bool checkButton() {
-  if (joySW) {
+bool checkButton()
+{
+  if (joySW)
+  {
     swActive = false;
   }
 
-  if (!joySW && !swActive) {
+  if (!joySW && !swActive)
+  {
     swActive = true;
     return true;
   }
@@ -87,28 +102,37 @@ bool checkButton() {
   return false;
 }
 
-
 // joystick input
-int getJoystick() {
+int getJoystick()
+{
   // get the joystick values
   xAxis = analogRead(xAxisPin);
   yAxis = analogRead(yAxisPin);
   joySW = !digitalRead(SWPin);
 
-  if (checkUp()) {
-//    Serial.println("UP");
+  if (checkUp())
+  {
+    //    Serial.println("UP");
     return JOY_UP;
-  } else if (checkDown()) {
-//    Serial.println("DOWN");
+  }
+  else if (checkDown())
+  {
+    //    Serial.println("DOWN");
     return JOY_DOWN;
-  } else if (checkLeft()) {
-//    Serial.println("LEFT");
+  }
+  else if (checkLeft())
+  {
+    //    Serial.println("LEFT");
     return JOY_LEFT;
-  } else if (checkRight()) {
-//    Serial.println("RIGHT");
+  }
+  else if (checkRight())
+  {
+    //    Serial.println("RIGHT");
     return JOY_RIGHT;
-  } else if (checkButton()) {
-//    Serial.println("BUTTON");
+  }
+  else if (checkButton())
+  {
+    //    Serial.println("BUTTON");
     return JOY_SW;
   }
 
