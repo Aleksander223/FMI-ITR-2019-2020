@@ -51,3 +51,4 @@ byte LCDBrightness = 90;
 bool gameStarted = false;
 bool musicOn = false;
 bool gameInitialized = false;
+unsigned long gameStartTime = 0;

@@ -6,8 +6,8 @@
 #include "lcdMenu.h"
 
 // GAME PARAMETERS
-const int gameWidth = 8;
-const int gameHeight = 8;
+const int gameWidth = 8; // matrix is bordered
+const int gameHeight = 8  ;
 
 // max size of a tetromino, accounted for rotation
 const int tetrominoWidth = 4;
@@ -20,12 +20,17 @@ byte gameMatrix[gameHeight][gameWidth];
 
 // the tetromino/shape
 byte tetromino[tetrominoHeight][tetrominoWidth];
-byte tetrominoX, tetrominoY; // top left coordinates on matrix
+int tetrominoX, tetrominoY; // top left coordinates on matrix
+byte noOfRotations = 0;
 
 // global timers
 bool spawnNextShape = true;
 unsigned long lastFall = 0;
 int fallInterval = 1200;
+// able to move tetromino after it falls
+int gracePeriod = 400;
+unsigned long lastGrace = 0;
+bool graceStarted = false;
 
 unsigned long spawnStart = 0;
 int spawnDelay = 600;
@@ -89,10 +94,10 @@ void constructSquare(byte offset) {
   tetrominoX = offset;
   tetrominoY = 0; // spawns it at the top
 
-  tetromino[0][1] = 2;
-  tetromino[0][2] = 2;
   tetromino[1][1] = 2;
   tetromino[1][2] = 2;
+  tetromino[2][1] = 2;
+  tetromino[2][2] = 2;
 }
 
 // same, but with a line
@@ -137,21 +142,33 @@ void constructZ(byte offset) {
   tetromino[0][2] = 2;
 }
 
-bool tetrominoFits(byte coordX, byte coordY) {
-  for (byte i = coordY; i < coordY + tetrominoHeight; i++) {
-    for (byte j = coordX; j < coordX + tetrominoWidth; j++) {
+bool tetrominoFits(int coordX, int coordY) {
+  for (int i = coordY; i < coordY + tetrominoHeight; i++) {
+    for (int j = coordX; j < coordX + tetrominoWidth; j++) {
       // if the bit is on
       if (tetromino[i - coordY][j - coordX] == 2) {
+        // bounds check
+        if (i >= gameHeight || i < 0 || j >= gameWidth || j < 0) {
+          return false;
+        }
         // collision check
-        if (gameMatrix[i][j] == 1) {
+        if (gameMatrix[i][j] != 0) {
           return false;
         }
-
-        // boundary check
-        if (i >= gameHeight || j >= gameWidth || i < 0 || j < 0) {
-          return false;
-        }
+//        if (i >= gameHeight || j >= gameWidth || i < 0 || j < 0 || (gameMatrix[i][j] != 0)) {
+//          printTetromino();
+//          Serial.println(i);
+//          Serial.println(j);
+//          Serial.println(coordY);
+//          Serial.println(coordX);
+//          return false;
+//        }
       }
+//      if (i >= 0 && i < gameHeight && j >= 0 && j < gameWidth) {
+//          if (tetromino[i - coordY][j - coordX] == 2 && gameMatrix[i][j] != 0) {
+//            return false;
+//          }
+//      }
     }
   }
 
@@ -201,9 +218,10 @@ bool tetrominoFell() {
 
 // makes tetromino static
 void makeTetrominoStatic() {
-  for (byte i = tetrominoY; i < tetrominoY + tetrominoHeight; i++) {
-    for (byte j = tetrominoX; j < tetrominoX + tetrominoWidth; j++) {
+  for (int i = tetrominoY; i < tetrominoY + tetrominoHeight; i++) {
+    for (int j = tetrominoX; j < tetrominoX + tetrominoWidth; j++) {
       if (tetromino[i - tetrominoY][j - tetrominoX] == 2)  {
+        
         gameMatrix[i][j] = 1;
       }
     }
@@ -214,6 +232,7 @@ void makeTetrominoStatic() {
 // makes current tetromino static and spawns the next one
 void nextTetromino() {
   // determine the next shape
+  
   byte randValue = random(0, 5);
 
   if (randValue == 0) {
@@ -236,7 +255,7 @@ void renderTetromino() {
   for (byte i = 0; i < tetrominoHeight; i++) {
     for (byte j = 0; j < tetrominoWidth; j++) {
       if (tetromino[i][j])
-        lc.setLed(0, tetrominoX + j, tetrominoY + i, tetromino[i][j]);
+        lc.setLed(0, tetrominoX + j, tetrominoY + i, HIGH);
     }
   }
 }
@@ -250,6 +269,9 @@ void initGame() {
       gameMatrix[i][j] = 0;
     }
   }
+
+  gameStartTime = currentTime;
+  randomSeed(analogRead(A5) + currentTime);
 }
 
 // render method
@@ -275,6 +297,8 @@ void clearLines() {
       for (byte j = 0; j < gameWidth; j++) {
         gameMatrix[i][j] = 0;
       }
+
+      updateScore(20);
     } else {
       continue;
     }
@@ -307,6 +331,8 @@ void gameLoop() {
       playSFX(400);
       tetrominoY++;
 
+      updateScore(1);
+
       // reset fall interval
       lastFall = currentTime;
     }
@@ -315,31 +341,59 @@ void gameLoop() {
 
     if (!tetrominoFits(tetrominoX, tetrominoY)) {
       tetrominoRotateLeft();
-    } 
+    } else {
+      noOfRotations++;
+    }
+
+    if (noOfRotations > 3) {
+      updateScore(-15);
+    }
   }
 
   // GAME LOGIC //
+
+  // update current time
+  if (currentTime - gameStartTime >= 1000) {
+    updateTimeLeft();
+    gameStartTime = currentTime;
+  }
 
   // fall
   if (currentTime > lastFall + fallInterval) {
     playSFX(400);
     lastFall = currentTime;
-    tetrominoY++;
+    if (tetrominoFits(tetrominoX, tetrominoY + 1)) {
+     tetrominoY++; 
+    }
   }
 
   // if the tromino fell signal for the next shape to spawn
-  if (!spawnNextShape && tetrominoFell()) {
+  if (tetrominoFell()) {
     playSFX(1600);
+    // start grace period
+    if (!graceStarted) {
+      graceStarted = true;
+      lastGrace = currentTime;
+    }
+  
+    // make it static after grace period
+    if (currentTime > lastGrace + gracePeriod) {
+      graceStarted = false;
+      
+      // make it static and clear the tetromino matrix
+      makeTetrominoStatic();
 
-    // make it static and clear the tetromino matrix
-    makeTetrominoStatic();
+      updateScore(10);
 
-    // clear the full lines
-    clearLines();
+      // clear the full lines
+      clearLines();
     
-    spawnStart = currentTime;
+      spawnStart = currentTime;
 
-    spawnNextShape = true;
+      spawnNextShape = true;
+    }
+  } else if (graceStarted) {
+    graceStarted = false;
   }
 
 
@@ -360,6 +414,7 @@ void gameLoop() {
       menu();
       menuChanged = true;
       viewChanged = true;
+      gameInfoChanged = true;
       return;
     }
 
@@ -371,12 +426,5 @@ void gameLoop() {
   renderMatrix();
   renderTetromino();
   
-  playMelody();
-
-//  if (currentTime > lastFall + fallInterval) {
-//    lastFall = currentTime;
-//    updateMatrix();
-//  }
-
-  
+  playMelody();  
 }

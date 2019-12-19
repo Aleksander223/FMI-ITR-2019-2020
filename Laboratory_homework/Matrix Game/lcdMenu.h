@@ -110,6 +110,66 @@ void displayMenu() {
   }
 }
 
+// game info variables
+byte level = 1;
+byte goal = 5;
+byte currentGoal = 0;
+byte timeLimit = 60;
+byte timeLeft = 60;
+unsigned int gameScore = 0;
+bool gameInfoChanged = true;
+
+void displayGameInfo() {
+  if (gameInfoChanged) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+  
+    lcd.print("Lvl "); lcd.print(level);
+  
+    lcd.print(" Goal "); lcd.print(currentGoal); lcd.print("/"); lcd.print(goal);
+
+    lcd.setCursor(0, 1);
+  
+    lcd.print(timeLeft); lcd.print("s ");
+  
+    lcd.print("Score "); lcd.print(gameScore);
+
+    gameInfoChanged = false;
+  }
+}
+
+void updateScore(int value) {
+  if (value < 0 && -value > gameScore) {
+    gameScore = 0;
+  } else {
+    gameScore += level * value;
+  }
+  
+  gameInfoChanged = true;
+}
+
+void updateLevel() {
+  level++;
+  goal += 2;
+  if (timeLimit - 5 > 15) {
+    timeLimit -= 5;
+  }
+
+  gameInfoChanged = true;
+}
+
+void updateGoal() {
+  currentGoal++;
+
+  gameInfoChanged = true;
+}
+
+void updateTimeLeft() {
+  timeLeft--;
+
+  gameInfoChanged = true;
+}
+
 void menu() {
   updateCursor();
 

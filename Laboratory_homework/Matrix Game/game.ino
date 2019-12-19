@@ -64,6 +64,7 @@ void loop() {
 
     gameInitialized = true;
   } else {
+    displayGameInfo();
     gameLoop();
   }
 }
