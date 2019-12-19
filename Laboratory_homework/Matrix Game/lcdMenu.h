@@ -147,44 +147,27 @@ void displayGameInfo()
   }
 }
 
-void updateScore(int value)
+void displayGameOverMenu()
 {
-  if (value < 0 && -value > gameScore)
+  if (menuChanged)
   {
-    gameScore = 0;
+    lcd.clear();
+
+    STRUCT_SCORE highestScore = readHighScore();
+
+    lcd.print("Score: "); lcd.print(gameScore);
+
+    lcd.setCursor(0, 1);
+    
+    if (gameScore <= highestScore.score) {
+      lcd.print("Better luck next time!");
+    }
+    else {
+      lcd.print("You beat the high score!");
+    }
+
+    menuChanged = false;
   }
-  else
-  {
-    gameScore += level * value;
-  }
-
-  gameInfoChanged = true;
-}
-
-void updateLevel()
-{
-  level++;
-  goal += 2;
-  if (timeLimit - 5 > 15)
-  {
-    timeLimit -= 5;
-  }
-
-  gameInfoChanged = true;
-}
-
-void updateGoal()
-{
-  currentGoal++;
-
-  gameInfoChanged = true;
-}
-
-void updateTimeLeft()
-{
-  timeLeft--;
-
-  gameInfoChanged = true;
 }
 
 void menu()
@@ -228,6 +211,10 @@ void menu()
   else if (currentView == 2)
   {
     displayHighScore();
+  }
+  else if (currentView == 4)
+  {
+    displayGameOverMenu();
   }
   else if (currentView == 9)
   {

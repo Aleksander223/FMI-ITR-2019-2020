@@ -53,14 +53,31 @@ unsigned long currentTime = 0;
 // input
 byte joyStickState = -1;
 
+// DIFFICULTY
+const byte startingLevel = 1;
+const byte startingGoal = 2;
+const byte levelGoalUpdate = 1;
+const byte startingTimeLimit = 75;
+
+const int startingFallInterval = 900;
+const int startingGracePeriod = 400;
+const int startingSpawnDelay = 600;
+
+const int spawnDelayMin = 50;
+const int fallIntervalMin = 100;
+
+const int spawnDelayDecrement = 50;
+const int fallIntervalDecrement = 150;
+
 // game info variables
-byte level = 1;
-byte goal = 5;
+byte level = startingLevel;
+byte goal = startingGoal;
 byte currentGoal = 0;
-byte timeLimit = 60;
-byte timeLeft = 60;
+byte timeLimit = startingTimeLimit;
+int timeLeft = timeLimit;
 unsigned int gameScore = 0;
 bool gameInfoChanged = true;
+
 
 // booleans
 bool gameStarted = false;
@@ -70,6 +87,8 @@ bool gameInitialized = false;
 // menu
 bool menuChanged = true;
 bool viewChanged = false;
+
+char playerName[4] = "AAA";
 
 // sounds stupid but the arduino somehow senses the joystick is pressed upon initialization so this is necessary
 // would use delay but that's against the rules ¯\_(ツ)_/¯
