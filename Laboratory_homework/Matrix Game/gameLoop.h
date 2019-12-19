@@ -76,17 +76,19 @@ void updateLevel()
 
   // reset goal progress
   resetGoal();
-  
+
   if (timeLimit - 5 > 15)
   {
     timeLimit -= 5;
   }
 
-  if (spawnDelay - spawnDelayDecrement > spawnDelayMin) {
+  if (spawnDelay - spawnDelayDecrement > spawnDelayMin)
+  {
     spawnDelay -= spawnDelayDecrement;
   }
 
-  if (fallInterval - fallIntervalDecrement > fallIntervalMin) {
+  if (fallInterval - fallIntervalDecrement > fallIntervalMin)
+  {
     fallInterval -= fallIntervalDecrement;
   }
 
@@ -170,7 +172,8 @@ bool tetrominoFits(int coordX, int coordY)
       if (tetromino[i - coordY][j - coordX] == 2)
       {
         // if it's too high up, we'll just return true
-        if (i < 0 && j >=0 && j < gameWidth) {
+        if (i < 0 && j >= 0 && j < gameWidth)
+        {
           return true;
         }
         // bounds check
@@ -245,14 +248,14 @@ void nextTetromino()
   else if (randValue == 4)
   {
     constructZ(gameWidth / 2);
-  } 
-  else if (randValue == 5) 
-  {
-    constructJ(gameWidth / 2);  
   }
-  else if (randValue == 6) 
+  else if (randValue == 5)
   {
-    constructS(gameWidth / 2);  
+    constructJ(gameWidth / 2);
+  }
+  else if (randValue == 6)
+  {
+    constructS(gameWidth / 2);
   }
 }
 
@@ -366,7 +369,8 @@ void loseGame()
 
   // write score
   STRUCT_SCORE highestScore = readHighScore();
-  if (highestScore.score < gameScore) {
+  if (highestScore.score < gameScore)
+  {
     writeHighScore(playerName, gameScore);
   }
 }
@@ -406,7 +410,7 @@ void gameLoop()
     }
   }
   // reset shape
-  else if (joyStickState == JOY_SW) 
+  else if (joyStickState == JOY_SW)
   {
     playSFX(2000);
 
@@ -420,7 +424,7 @@ void gameLoop()
     {
       loseGame();
     }
-    
+
     spawnNextShape = false;
 
     // apply a penalty
@@ -458,18 +462,20 @@ void gameLoop()
   }
 
   // LEVEL ADVANCE
-  if (currentGoal >= goal) {
+  if (currentGoal >= goal)
+  {
     updateLevel();
 
     // reset time
     resetTimeLeft();
-  
+
     // reset matrix as well
     clearMatrix();
   }
 
   // TIME LIMIT FAIL
-  if (timeLeft <= 0) {
+  if (timeLeft <= 0)
+  {
     loseGame();
   }
 

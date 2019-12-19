@@ -155,14 +155,17 @@ void displayGameOverMenu()
 
     STRUCT_SCORE highestScore = readHighScore();
 
-    lcd.print("Score: "); lcd.print(gameScore);
+    lcd.print("Score: ");
+    lcd.print(gameScore);
 
     lcd.setCursor(0, 1);
-    
-    if (gameScore <= highestScore.score) {
+
+    if (gameScore <= highestScore.score)
+    {
       lcd.print("Better luck next time!");
     }
-    else {
+    else
+    {
       lcd.print("You beat the high score!");
     }
 

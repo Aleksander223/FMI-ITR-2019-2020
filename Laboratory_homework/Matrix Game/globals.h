@@ -78,7 +78,6 @@ int timeLeft = timeLimit;
 unsigned int gameScore = 0;
 bool gameInfoChanged = true;
 
-
 // booleans
 bool gameStarted = false;
 bool musicOn = false;
