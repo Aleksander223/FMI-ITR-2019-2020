@@ -19,10 +19,10 @@ STRUCT_SCORE readHighScore()
   return tmp;
 }
 
-void writeHighScore(const char *player, unsigned short score)
+void writeHighScore(const char *playerName, unsigned short score)
 {
   STRUCT_SCORE tmp;
-  strncpy(tmp.playerName, player, 4);
+  strncpy(tmp.playerName, playerName, 4);
   tmp.score = score;
 
   EEPROM.put(0, tmp);

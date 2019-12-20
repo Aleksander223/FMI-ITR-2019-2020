@@ -41,6 +41,10 @@ void setup()
 
   // Menu
   menu();
+
+  writeHighScore("ALX", 9000);
+
+  debugMode();
 }
 
 void loop()

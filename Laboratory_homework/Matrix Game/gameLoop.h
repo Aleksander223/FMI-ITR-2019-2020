@@ -34,102 +34,18 @@ byte gameMatrix[gameHeight][gameWidth];
 // game timers
 bool spawnNextShape = true;
 unsigned long lastFall = 0;
-int fallInterval = startingFallInterval;
+int fallInterval = 1200;
 // this is used for game time limit logic and for the lcd
 // basically it's useful for displaying when a second passed
 unsigned long lastTimerStart = 0;
 
 // able to move tetromino after it falls
-int gracePeriod = startingGracePeriod;
+int gracePeriod = 400;
 unsigned long lastGrace = 0;
 bool graceStarted = false;
 
 unsigned long spawnStart = 0;
-int spawnDelay = startingSpawnDelay;
-
-// Game info methods
-void updateScore(int value)
-{
-  if (value < 0 && level * -value >= gameScore)
-  {
-    gameScore = 0;
-  }
-  else
-  {
-    gameScore += level * value;
-  }
-
-  gameInfoChanged = true;
-}
-
-void resetGoal()
-{
-  currentGoal = 0;
-
-  gameInfoChanged = true;
-}
-
-void updateLevel()
-{
-  level++;
-  goal += 1;
-
-  // reset goal progress
-  resetGoal();
-
-  if (timeLimit - 5 > 15)
-  {
-    timeLimit -= 5;
-  }
-
-  if (spawnDelay - spawnDelayDecrement > spawnDelayMin)
-  {
-    spawnDelay -= spawnDelayDecrement;
-  }
-
-  if (fallInterval - fallIntervalDecrement > fallIntervalMin)
-  {
-    fallInterval -= fallIntervalDecrement;
-  }
-
-  gameInfoChanged = true;
-}
-
-void updateGoal()
-{
-  currentGoal++;
-
-  gameInfoChanged = true;
-}
-
-void updateTimeLeft()
-{
-  timeLeft--;
-
-  gameInfoChanged = true;
-}
-
-void resetTimeLeft()
-{
-  timeLeft = timeLimit;
-}
-
-// resets all params to their default value
-void resetGame()
-{
-  resetGoal();
-  goal = startingGoal;
-  timeLimit = startingTimeLimit;
-  resetTimeLeft();
-
-  level = startingLevel;
-
-  fallInterval = startingFallInterval;
-  gracePeriod = startingGracePeriod;
-  spawnDelay = startingSpawnDelay;
-
-  gameScore = 0;
-}
+int spawnDelay = 600;
 
 // DEBUG METHODS
 
@@ -171,13 +87,8 @@ bool tetrominoFits(int coordX, int coordY)
       // if the bit is on
       if (tetromino[i - coordY][j - coordX] == 2)
       {
-        // if it's too high up, we'll just return true
-        if (i < 0 && j >= 0 && j < gameWidth)
-        {
-          return true;
-        }
         // bounds check
-        if (i >= gameHeight || j >= gameWidth || j < 0)
+        if (i >= gameHeight || i < 0 || j >= gameWidth || j < 0)
         {
           return false;
         }
@@ -227,7 +138,7 @@ void nextTetromino()
 {
   // determine the next shape
 
-  byte randValue = random(0, noOfShapes);
+  byte randValue = random(0, 5);
 
   if (randValue == 0)
   {
@@ -249,20 +160,14 @@ void nextTetromino()
   {
     constructZ(gameWidth / 2);
   }
-  else if (randValue == 5)
-  {
-    constructJ(gameWidth / 2);
-  }
-  else if (randValue == 6)
-  {
-    constructS(gameWidth / 2);
-  }
+
+  tetrominoY = 0;
 }
 
 // Matrix methods
 
-// clear matrix
-void clearMatrix()
+// clear matrix and set borders
+void initGame()
 {
   for (byte i = 0; i < gameHeight; i++)
   {
@@ -271,15 +176,8 @@ void clearMatrix()
       gameMatrix[i][j] = 0;
     }
   }
-}
 
-// clear matrix and set borders
-void initGame()
-{
-  resetGame();
-  clearMatrix();
-
-  lastTimerStart = currentTime;
+  gameStartTime = currentTime;
   randomSeed(analogRead(A5) + currentTime);
 }
 
@@ -324,9 +222,6 @@ void clearLines()
 
     // decrement i so we don't skip lines
     i--;
-
-    // update goal
-    updateGoal();
   }
 }
 
@@ -352,26 +247,6 @@ void renderTetromino()
       if (tetromino[i][j])
         lc.setLed(0, tetrominoX + j, tetrominoY + i, HIGH);
     }
-  }
-}
-
-// loses the game
-void loseGame()
-{
-  gameStarted = false;
-  gameInitialized = false;
-
-  menuChanged = true;
-
-  currentView = 4;
-
-  menu();
-
-  // write score
-  STRUCT_SCORE highestScore = readHighScore();
-  if (highestScore.score < gameScore)
-  {
-    writeHighScore(playerName, gameScore);
   }
 }
 
@@ -409,27 +284,6 @@ void gameLoop()
       lastFall = currentTime;
     }
   }
-  // reset shape
-  else if (joyStickState == JOY_SW)
-  {
-    playSFX(2000);
-
-    nextTetromino();
-
-    // update fall interval
-    lastFall = currentTime;
-
-    // if the spawned tetromino doesn't fit, lose the game
-    if (!tetrominoFits(tetrominoX, tetrominoY))
-    {
-      loseGame();
-    }
-
-    spawnNextShape = false;
-
-    // apply a penalty
-    updateScore(-20);
-  }
   // rotate piece to the right
   else if (joyStickState == JOY_UP)
   {
@@ -459,24 +313,6 @@ void gameLoop()
   {
     updateTimeLeft();
     lastTimerStart = currentTime;
-  }
-
-  // LEVEL ADVANCE
-  if (currentGoal >= goal)
-  {
-    updateLevel();
-
-    // reset time
-    resetTimeLeft();
-
-    // reset matrix as well
-    clearMatrix();
-  }
-
-  // TIME LIMIT FAIL
-  if (timeLeft <= 0)
-  {
-    loseGame();
   }
 
   // fall
@@ -537,7 +373,14 @@ void gameLoop()
     // if the spawned tetromino doesn't fit, lose the game
     if (!tetrominoFits(tetrominoX, tetrominoY))
     {
-      loseGame();
+      gameStarted = false;
+      gameInitialized = false;
+
+      menu();
+      menuChanged = true;
+      viewChanged = true;
+      gameInfoChanged = true;
+      return;
     }
 
     spawnNextShape = false;

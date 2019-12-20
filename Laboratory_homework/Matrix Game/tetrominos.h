@@ -12,15 +12,10 @@
 const int tetrominoWidth = 4;
 const int tetrominoHeight = 4;
 
-// number of shapes
-const int noOfShapes = 7;
-
 // the tetromino/shape
 byte tetromino[tetrominoHeight][tetrominoWidth];
 int tetrominoX, tetrominoY; // top left coordinates on matrix
 byte noOfRotations = 0;
-
-int verticalOffset = 0; // this will spawn shapes from further up
 
 // clears the tetromino
 void clearTetromino()
@@ -32,9 +27,6 @@ void clearTetromino()
             tetromino[i][j] = 0;
         }
     }
-
-    // reset values
-    noOfRotations = 0;  
 }
 
 // rotates tetromino right
@@ -70,7 +62,7 @@ void constructL(byte offset)
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][0] = 2;
     tetromino[1][1] = 2;
@@ -85,7 +77,7 @@ void constructSquare(byte offset)
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][1] = 2;
     tetromino[1][2] = 2;
@@ -100,7 +92,7 @@ void constructLine(byte offset)
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][0] = 2;
     tetromino[1][1] = 2;
@@ -115,7 +107,7 @@ void constructT(byte offset)
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][0] = 2;
     tetromino[1][1] = 2;
@@ -123,14 +115,14 @@ void constructT(byte offset)
     tetromino[1][2] = 2;
 }
 
-// same, but with a S
-void constructS(byte offset)
+// same, but with a Z
+void constructZ(byte offset)
 {
     clearTetromino();
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][0] = 2;
     tetromino[1][1] = 2;
@@ -146,25 +138,25 @@ void constructJ(byte offset)
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[1][0] = 2;
     tetromino[1][1] = 2;
     tetromino[1][2] = 2;
-    tetromino[2][2] = 2;
+    tetromino[0][0] = 2;
 }
 
-// same, but with a Z
+// same, but with a s
 void constructZ(byte offset)
 {
     clearTetromino();
 
     // how far from the top left it is
     tetrominoX = offset;
-    tetrominoY = verticalOffset; // spawns it at the top
+    tetrominoY = 0; // spawns it at the top
 
     tetromino[0][0] = 2;
     tetromino[0][1] = 2;
-    tetromino[1][1] = 2;
+    tetromino[1][0] = 2;
     tetromino[1][2] = 2;
 }
