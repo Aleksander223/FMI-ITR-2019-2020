@@ -2,6 +2,8 @@
 Classic Tetris Game but with time pressure and levels.
 See the demo [here]().
 
+Old lab demo [here](https://drive.google.com/open?id=1bOoNM4v0xkCXmjHfVx26aJhmGe7ZwI9Z).
+
 ## Introdruction
 Tetris is a classic game that was developed by Alexey Pajitnov in 1984. The gameplay is simple, but addictive. The game consists of 10x24 board (but any size will work). Tetrominos (which are coloured shapes which come in different forms such as L, Z, squares, lines) fall from the top to the ground. The player can rotate these. The goal is to complete lines, thus increasing your score. After a line is filled, it clears, and all the tetrominos which were above fall down. For a gameplay sample of the original, watch [this.](https://www.youtube.com/watch?v=-FAzHyXZPm0)
 
