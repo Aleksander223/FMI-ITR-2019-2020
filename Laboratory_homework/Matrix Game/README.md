@@ -9,9 +9,10 @@ Tetris is a classic game that was developed by Alexey Pajitnov in 1984. The game
 The gameplay is exactly the same, except that the game has a certain **goal** per level (number of lines to complete) and a time pressure to complete them. If the player manages to complete the goal, then the board is cleared and the next level starts. The difference between levels is the difficulty of the game, which increases slowly, but surely. The piece spawning delay, the fall interval and even the scores are affected, making it for a challening, but fun experience. 
 
 ## How to play
-TODO
+Tetris is a simple game. The goal is to move *tetrominos* (the colored blocks) down in order to make complete lines. Upon completing a line, it is removed, and all of the tetrominoes above fall to the ground. Repeat.
 
-
+In my case, the board is a simple 8x8 matrix. The tetrominoes are shapes of different sizes and forms. See the pic below for reference.
+![The board and tetrominoes](https://imgur.com/NoSPCox.png)
 
 ## Score
 Let us denote **i** as the current level at which the player is at. The score is calculated as follows:
