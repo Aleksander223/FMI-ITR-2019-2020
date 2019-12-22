@@ -1,6 +1,6 @@
 # Endless Tetris
 Classic Tetris Game but with time pressure and levels.
-See the demo [here]().
+See the demo [here](https://drive.google.com/open?id=1Dn-ecY--W7DPJsV47cWAFsrjMtxTWa4Q).
 
 ## Introdruction
 Tetris is a classic game that was developed by Alexey Pajitnov in 1984. The gameplay is simple, but addictive. The game consists of 10x24 board (but any size will work). Tetrominos (which are coloured shapes which come in different forms such as L, Z, squares, lines) fall from the top to the ground. The player can rotate these. The goal is to complete lines, thus increasing your score. After a line is filled, it clears, and all the tetrominos which were above fall down. For a gameplay sample of the original, watch [this.](https://www.youtube.com/watch?v=-FAzHyXZPm0)
@@ -33,7 +33,7 @@ The HUD looks like this:
 
 As you can see the current level is in the top left of the screen, the goal in the top right (number of completed lines vs. goal), the timer in the bottom left, and finally the score in the bottom right.
 
-For a gameplay sample, please refer to the [demo]().
+For a gameplay sample, please refer to the [demo](https://drive.google.com/open?id=1Dn-ecY--W7DPJsV47cWAFsrjMtxTWa4Q).
 
 ## Controls
 |   Action   	|     Key    	|
