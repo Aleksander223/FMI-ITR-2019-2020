@@ -34,6 +34,12 @@ The HUD looks like this:
 As you can see the current level is in the top left of the screen, the goal in the top right (number of completed lines vs. goal), the timer in the bottom left, and finally the score in the bottom right.
 
 ## Controls
+|  Move left 	|  Joy Left  	|
+|:----------:	|:----------:	|
+| Move right 	|  Joy Right 	|
+|  Move Down 	|  Joy Down  	|
+|   Rotate   	|   Joy Up   	|
+| Swap piece 	| Joy Button 	|
 
 ## How is Endless Tetris different from the classic game?
 The gameplay is exactly the same, except that the game has a certain **goal** per level (number of lines to complete) and a time pressure to complete them. If the player manages to complete the goal, then the board is cleared and the next level starts. The difference between levels is the difficulty of the game, which increases slowly, but surely. The piece spawning delay, the fall interval and even the scores are affected, making it for a challening, but fun experience. 
