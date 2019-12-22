@@ -22,12 +22,6 @@ Let us denote **i** as the current level at which the player is at. The score is
 * Tetromino is swapped - i * (-20)
 
 The score is the sum of all of these actions. Obviously, advancing in level (completing the number of lines for a particular level) makes it easier to reach higher score, but also penalizes mistakes way more harshly.
-
-## Meeting technical requirements
-
- 1. Score: see above
- 2. Progress in difficulty: see levels (the speed gets faster, but also the score gets better, also the game difficulty can be accounted into this, which modifies the level time and final score multiplier)
- 3. 2 other requirements: levels (see gameplay description) and time pressure (see gameplay description)
  
  ## Hardware needed
  Here is a minimal list of hardware needed to get something similar to my setup
@@ -44,3 +38,11 @@ The score is the sum of all of these actions. Obviously, advancing in level (com
  * OPTIONAL: Buzzers (if you want music or SFX)
  
  This is how the final setup should look like: 
+
+
+## Meeting technical requirements
+
+ 1. Score: see above
+ 2. Progress in difficulty: see levels (the speed gets faster, but also the score gets better, also the game difficulty can be accounted into this, which modifies the level time and final score multiplier)
+ 3. 2 other requirements: levels (see gameplay description) and time pressure (see gameplay description)
+ 4. Hardware (see Hardware needed)
