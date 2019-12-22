@@ -1,6 +1,6 @@
 # Endless Tetris
 Classic Tetris Game but with time pressure and levels.
-For a demo, see LINK
+See the demo [here]().
 
 ## Introdruction
 Tetris is a classic game that was developed by Alexey Pajitnov in 1984. The gameplay is simple, but addictive. The game consists of 10x24 board (but any size will work). Tetrominos (which are coloured shapes which come in different forms such as L, Z, squares, lines) fall from the top to the ground. The player can rotate these. The goal is to complete lines, thus increasing your score. After a line is filled, it clears, and all the tetrominos which were above fall down. For a gameplay sample of the original, watch [this.](https://www.youtube.com/watch?v=-FAzHyXZPm0)
@@ -26,12 +26,14 @@ That is the basic gameplay.
 
 However, my implementation of the game is a bit more complicated.
 
-The game is split in levels, each level being harder than the previous one, but providing more points (and penalties!) to the player. Each level has a set amount of time to complete a number of lines, called the goal. If the player does not reach this goal in the provided time, the game will end.
+The game is split in levels, each level being harder than the previous one, but providing more points (and penalties!) to the player. Each level has a set amount of time to complete a number of lines, called the goal. If the player does not reach this goal in the provided time, the game will end. If, however, the player does reach the goal in time, then the board is cleared, and the game advances to the next level, where the spawn delay and fall interval are reduced a little bit, in order to increase the difficulty. The timer is also reset, but it's starting value goes down.
 
 The HUD looks like this:
 ![HUD](https://imgur.com/CNg0R9Q.png)
 
 As you can see the current level is in the top left of the screen, the goal in the top right (number of completed lines vs. goal), the timer in the bottom left, and finally the score in the bottom right.
+
+For a gameplay sample, please refer to the [demo]().
 
 ## Controls
 |   Action   	|     Key    	|
