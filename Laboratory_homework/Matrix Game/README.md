@@ -34,8 +34,9 @@ The HUD looks like this:
 As you can see the current level is in the top left of the screen, the goal in the top right (number of completed lines vs. goal), the timer in the bottom left, and finally the score in the bottom right.
 
 ## Controls
-|  Move left 	|  Joy Left  	|
+|   Action   	|     Key    	|
 |:----------:	|:----------:	|
+|  Move left 	|  Joy Left  	|
 | Move right 	|  Joy Right 	|
 |  Move Down 	|  Joy Down  	|
 |   Rotate   	|   Joy Up   	|
