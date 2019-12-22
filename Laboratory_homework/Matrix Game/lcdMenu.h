@@ -31,9 +31,8 @@ char infoMenuStrings[numStrings][16] = {
     "@unibucrobotics"};
 
 char settingsStrings[numStrings][8] = {
-  "Name: ",
-  "Level: " 
-};
+    "Name: ",
+    "Level: "};
 
 void updateCursor(int limit)
 {
@@ -190,7 +189,9 @@ void displayGameOver()
   {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print(playerName); lcd.print(" "); lcd.print(gameScore);
+    lcd.print(playerName);
+    lcd.print(" ");
+    lcd.print(gameScore);
 
     STRUCT_SCORE score = readHighScore();
 
@@ -218,13 +219,16 @@ void displaySettings()
   {
     lcd.clear();
     lcd.setCursor(0, 0);
-    lcd.print("Name: "); lcd.print(playerName);
+    lcd.print("Name: ");
+    lcd.print(playerName);
 
     lcd.setCursor(0, 1);
-    lcd.print("Level: "); lcd.print(startingLevel);
+    lcd.print("Level: ");
+    lcd.print(startingLevel);
 
     // name
-    if (cursorPosition == 0 && cursorHorizontal != 0) {
+    if (cursorPosition == 0 && cursorHorizontal != 0)
+    {
       lcd.setCursor(cursorHorizontal + 5, cursorPosition);
 
       if (settingChanged)
@@ -238,7 +242,8 @@ void displaySettings()
       }
     }
     // level
-    else if (cursorPosition == 1 && cursorHorizontal != 0) {
+    else if (cursorPosition == 1 && cursorHorizontal != 0)
+    {
       lcd.setCursor(cursorHorizontal + 6, cursorPosition);
 
       // to avoid wrapping
@@ -254,8 +259,9 @@ void displaySettings()
         startingLevel = 1;
       }
     }
-    else{
-    lcd.setCursor(cursorHorizontal, cursorPosition);
+    else
+    {
+      lcd.setCursor(cursorHorizontal, cursorPosition);
     }
     lcd.cursor();
 

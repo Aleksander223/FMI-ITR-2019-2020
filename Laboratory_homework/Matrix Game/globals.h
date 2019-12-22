@@ -67,7 +67,6 @@ const byte timerDecrement = 2;
 
 const byte startingGoal = 2;
 
-
 // game info variables
 byte level = 1;
 byte goal = startingGoal;

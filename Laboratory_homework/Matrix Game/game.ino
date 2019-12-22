@@ -42,8 +42,8 @@ void setup()
   // Menu
   menu();
 
-//  debugMode();
-  
+  //  debugMode();
+
   // filter random input
   joyStickState = getJoystick();
 }

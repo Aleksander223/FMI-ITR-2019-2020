@@ -22,7 +22,6 @@
  * and change just what's inside the tetromino matrix (way more efficient than iterating over the whole matrix)
 */
 
-
 // GAME PARAMETERS
 const int gameWidth = 8;
 const int gameHeight = 8;
@@ -66,7 +65,7 @@ void updateScore(int value)
 void updateLevel()
 {
   level++;
-  goal ++;
+  goal++;
   currentGoal = 0;
   if (timeLimit - timerDecrement > 15)
   {
@@ -76,14 +75,16 @@ void updateLevel()
   currentGoal = 0;
   timeLeft = timeLimit;
 
-  if (fallInterval - fallIntervalDecrement >= FRAME_TIME) {
+  if (fallInterval - fallIntervalDecrement >= FRAME_TIME)
+  {
     fallInterval -= fallIntervalDecrement;
   }
 
-  if (spawnDelay - spawnDelayDecrement >= FRAME_TIME) {
+  if (spawnDelay - spawnDelayDecrement >= FRAME_TIME)
+  {
     spawnDelay -= spawnDelayDecrement;
   }
-  
+
   gameInfoChanged = true;
 }
 
@@ -111,7 +112,7 @@ void resetGameVariables()
   timeLeft = timeLimit;
 
   goal = startingGoal + startingLevel - 1;
-  
+
   spawnDelay = max(FRAME_TIME, startingSpawnDelay - (level - 1) * spawnDelayDecrement);
   fallInterval = max(FRAME_TIME, startingFallInterval - (level - 1) * fallIntervalDecrement);
 }
@@ -231,7 +232,7 @@ void nextTetromino()
   }
   else if (randValue == 5)
   {
-    constructJ(gameWidth /2);
+    constructJ(gameWidth / 2);
   }
   else if (randValue == 6)
   {
@@ -259,7 +260,7 @@ void clearMatrix()
 // clear matrix and set borders
 void initGame()
 {
-  resetGameVariables(); 
+  resetGameVariables();
   clearMatrix();
   randomSeed(analogRead(A5) + currentTime);
 }
@@ -338,13 +339,12 @@ void renderTetromino()
 void loseGame()
 {
   gameStarted = false;
-      gameInitialized = false;
-      // game over screen
-      currentView = 3;
-      menuChanged = true;
-      
-      menu();
-      
+  gameInitialized = false;
+  // game over screen
+  currentView = 3;
+  menuChanged = true;
+
+  menu();
 }
 
 void gameLoop()
@@ -410,7 +410,6 @@ void gameLoop()
 
     updateScore(-15);
   }
-  
 
   // GAME LOGIC //
 
