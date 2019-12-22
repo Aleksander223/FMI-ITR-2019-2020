@@ -1,6 +1,6 @@
 # Endless Tetris
 Classic Tetris Game but with time pressure and levels.
-See the demo [here]().
+See the demo [here](https://drive.google.com/open?id=1j0OoevyR5HknwuAPItKiz4-i3A5Jfzjc).
 
 Old lab demo [here](https://drive.google.com/open?id=1bOoNM4v0xkCXmjHfVx26aJhmGe7ZwI9Z).
 
@@ -35,7 +35,7 @@ The HUD looks like this:
 
 As you can see the current level is in the top left of the screen, the goal in the top right (number of completed lines vs. goal), the timer in the bottom left, and finally the score in the bottom right.
 
-For a gameplay sample, please refer to the [demo]().
+For a gameplay sample, please refer to the [demo](https://drive.google.com/open?id=1j0OoevyR5HknwuAPItKiz4-i3A5Jfzjc).
 
 ## Controls
 |   Action   	|     Key    	|
