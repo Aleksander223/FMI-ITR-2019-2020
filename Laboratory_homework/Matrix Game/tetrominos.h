@@ -147,7 +147,7 @@ void constructJ(byte offset)
 }
 
 // same, but with a s
-void constructZ(byte offset)
+void constructS(byte offset)
 {
     clearTetromino();
 
@@ -157,6 +157,6 @@ void constructZ(byte offset)
 
     tetromino[0][0] = 2;
     tetromino[0][1] = 2;
-    tetromino[1][0] = 2;
+    tetromino[1][1] = 2;
     tetromino[1][2] = 2;
 }

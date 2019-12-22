@@ -42,9 +42,10 @@ void setup()
   // Menu
   menu();
 
-  writeHighScore("ALX", 9000);
-
-  debugMode();
+//  debugMode();
+  
+  // filter random input
+  joyStickState = getJoystick();
 }
 
 void loop()
@@ -52,11 +53,6 @@ void loop()
   currentTime = millis();
 
   joyStickState = getJoystick();
-
-  if (!oneSecondPassed && currentTime > 2000)
-  {
-    oneSecondPassed = true;
-  }
 
   if (!gameStarted)
   {

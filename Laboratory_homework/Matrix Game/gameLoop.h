@@ -22,8 +22,9 @@
  * and change just what's inside the tetromino matrix (way more efficient than iterating over the whole matrix)
 */
 
+
 // GAME PARAMETERS
-const int gameWidth = 8; // matrix is bordered
+const int gameWidth = 8;
 const int gameHeight = 8;
 
 // GAME GLOBALS
@@ -34,7 +35,7 @@ byte gameMatrix[gameHeight][gameWidth];
 // game timers
 bool spawnNextShape = true;
 unsigned long lastFall = 0;
-int fallInterval = 1200;
+int fallInterval = startingFallInterval;
 // this is used for game time limit logic and for the lcd
 // basically it's useful for displaying when a second passed
 unsigned long lastTimerStart = 0;
@@ -45,7 +46,75 @@ unsigned long lastGrace = 0;
 bool graceStarted = false;
 
 unsigned long spawnStart = 0;
-int spawnDelay = 600;
+int spawnDelay = startingSpawnDelay;
+
+// hud update methods
+void updateScore(int value)
+{
+  if (value < 0 && -value > gameScore)
+  {
+    gameScore = 0;
+  }
+  else
+  {
+    gameScore += level * value;
+  }
+
+  gameInfoChanged = true;
+}
+
+void updateLevel()
+{
+  level++;
+  goal ++;
+  currentGoal = 0;
+  if (timeLimit - timerDecrement > 15)
+  {
+    timeLimit -= timerDecrement;
+  }
+
+  currentGoal = 0;
+  timeLeft = timeLimit;
+
+  if (fallInterval - fallIntervalDecrement >= FRAME_TIME) {
+    fallInterval -= fallIntervalDecrement;
+  }
+
+  if (spawnDelay - spawnDelayDecrement >= FRAME_TIME) {
+    spawnDelay -= spawnDelayDecrement;
+  }
+  
+  gameInfoChanged = true;
+}
+
+void updateGoal()
+{
+  currentGoal++;
+
+  gameInfoChanged = true;
+}
+
+void updateTimeLeft()
+{
+  timeLeft--;
+
+  gameInfoChanged = true;
+}
+
+// resets level, score, timer etc
+void resetGameVariables()
+{
+  gameScore = 0;
+  level = startingLevel;
+
+  timeLimit = max(15, startingTimeLimit - (level - 1) * timerDecrement);
+  timeLeft = timeLimit;
+
+  goal = startingGoal + startingLevel - 1;
+  
+  spawnDelay = max(FRAME_TIME, startingSpawnDelay - (level - 1) * spawnDelayDecrement);
+  fallInterval = max(FRAME_TIME, startingFallInterval - (level - 1) * fallIntervalDecrement);
+}
 
 // DEBUG METHODS
 
@@ -138,7 +207,7 @@ void nextTetromino()
 {
   // determine the next shape
 
-  byte randValue = random(0, 5);
+  byte randValue = random(0, 7);
 
   if (randValue == 0)
   {
@@ -160,14 +229,23 @@ void nextTetromino()
   {
     constructZ(gameWidth / 2);
   }
+  else if (randValue == 5)
+  {
+    constructJ(gameWidth /2);
+  }
+  else if (randValue == 6)
+  {
+    constructS(gameWidth / 2);
+  }
 
   tetrominoY = 0;
+  noOfRotations = 0;
 }
 
 // Matrix methods
 
-// clear matrix and set borders
-void initGame()
+// clear matrix
+void clearMatrix()
 {
   for (byte i = 0; i < gameHeight; i++)
   {
@@ -176,8 +254,13 @@ void initGame()
       gameMatrix[i][j] = 0;
     }
   }
+}
 
-  gameStartTime = currentTime;
+// clear matrix and set borders
+void initGame()
+{
+  resetGameVariables(); 
+  clearMatrix();
   randomSeed(analogRead(A5) + currentTime);
 }
 
@@ -204,6 +287,7 @@ void clearLines()
       }
 
       updateScore(20);
+      updateGoal();
     }
     else
     {
@@ -248,6 +332,19 @@ void renderTetromino()
         lc.setLed(0, tetrominoX + j, tetrominoY + i, HIGH);
     }
   }
+}
+
+// loses the game
+void loseGame()
+{
+  gameStarted = false;
+      gameInitialized = false;
+      // game over screen
+      currentView = 3;
+      menuChanged = true;
+      
+      menu();
+      
 }
 
 void gameLoop()
@@ -305,14 +402,36 @@ void gameLoop()
       updateScore(-15);
     }
   }
+  // swap piece
+  else if (joyStickState == JOY_SW)
+  {
+    clearTetromino();
+    nextTetromino();
+
+    updateScore(-15);
+  }
+  
 
   // GAME LOGIC //
+
+  // if we have achieved the goal
+  if (currentGoal >= goal)
+  {
+    clearMatrix();
+    updateLevel();
+  }
 
   // update level timer
   if (currentTime - lastTimerStart >= 1000)
   {
     updateTimeLeft();
     lastTimerStart = currentTime;
+  }
+
+  // out of time fail
+  if (timeLeft <= 0)
+  {
+    loseGame();
   }
 
   // fall
@@ -373,14 +492,7 @@ void gameLoop()
     // if the spawned tetromino doesn't fit, lose the game
     if (!tetrominoFits(tetrominoX, tetrominoY))
     {
-      gameStarted = false;
-      gameInitialized = false;
-
-      menu();
-      menuChanged = true;
-      viewChanged = true;
-      gameInfoChanged = true;
-      return;
+      loseGame();
     }
 
     spawnNextShape = false;
